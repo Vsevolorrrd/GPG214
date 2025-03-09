@@ -12,12 +12,12 @@ public class MainMenu : MonoBehaviour
     public bool canOpenPauseMenu = false;
     public bool lockCursor = false;
 
-    private ContentLoading contentLoading;
+    private Seva.ContentLoading contentLoading;
     public static Action<bool> OnPause;
 
     private void Start()
     {
-        contentLoading = GetComponent<ContentLoading>();
+        contentLoading = GetComponent<Seva.ContentLoading>();
     }
     void Update()
     {
@@ -30,7 +30,7 @@ public class MainMenu : MonoBehaviour
     public void ContinueGame()
     {
         SetPauseState(false);
-        SceneLoader.Instance.LoadScene(SaveSystem.Instance.sceneToLoad, true);
+        SceneLoader.Instance.LoadScene(Seva.SaveSystem.Instance.sceneToLoad, true);
     }
     public void StartGame()
     {
@@ -71,7 +71,7 @@ public class MainMenu : MonoBehaviour
 
     public void SaveGame()
     {
-        SaveSystem.Instance.SaveGameData();
+        Seva.SaveSystem.Instance.SaveGameData();
     }
 
     public void QuitGame()

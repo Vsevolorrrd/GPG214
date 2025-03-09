@@ -3,67 +3,70 @@ using UnityEngine;
 using System.Collections;
 using System.Linq;
 
-public class AssetBundleLoader : MonoBehaviour
+namespace Seva
 {
-    public string bundleName = "levelassets";
-    public string assetName = "EchoPoint";
-    public Transform[] echoPointSpawns;
-    private string bundlePath;
-
-    void Start()
+    public class AssetBundleLoader : MonoBehaviour
     {
-        bundlePath = Path.Combine(Application.streamingAssetsPath, bundleName);
-        StartCoroutine(LoadAssetBundle());
-    }
+        public string bundleName = "levelassets";
+        public string assetName = "EchoPoint";
+        public Transform[] echoPointSpawns;
+        private string bundlePath;
 
-    IEnumerator LoadAssetBundle()
-    {
-        if (!File.Exists(bundlePath))
+        void Start()
         {
-            Debug.LogError("Asset Bundle not found: " + bundlePath);
-            yield break;
+            bundlePath = Path.Combine(Application.streamingAssetsPath, bundleName);
+            StartCoroutine(LoadAssetBundle());
         }
 
-        // Check if the bundle is already loaded
-        AssetBundle existingBundle = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(bundle => bundle.name == bundleName);
-
-        if (existingBundle != null)
+        IEnumerator LoadAssetBundle()
         {
-            Debug.LogWarning("AssetBundle already loaded");
-            yield return LoadAsset(existingBundle);
-            yield break;
-        }
-
-        AssetBundleCreateRequest bundleRequest = AssetBundle.LoadFromFileAsync(bundlePath);
-        yield return bundleRequest;
-
-        AssetBundle assetBundle = bundleRequest.assetBundle;
-        if (assetBundle == null)
-        {
-            Debug.LogError("Asset Bundle Failed");
-            yield break;
-        }
-
-        yield return LoadAsset(assetBundle);
-    }
-
-    IEnumerator LoadAsset(AssetBundle assetBundle)
-    {
-        AssetBundleRequest assetRequest = assetBundle.LoadAssetAsync<GameObject>(assetName);
-        yield return assetRequest;
-
-        GameObject loadedObject = assetRequest.asset as GameObject;
-        if (loadedObject != null)
-        {
-            foreach (Transform transform in echoPointSpawns)
+            if (!File.Exists(bundlePath))
             {
-                Instantiate(loadedObject, transform.position, Quaternion.identity);
+                Debug.LogError("Asset Bundle not found: " + bundlePath);
+                yield break;
             }
-            Debug.Log("Loaded and instantiated: " + assetName);
+
+            // Check if the bundle is already loaded
+            AssetBundle existingBundle = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(bundle => bundle.name == bundleName);
+
+            if (existingBundle != null)
+            {
+                Debug.LogWarning("AssetBundle already loaded");
+                yield return LoadAsset(existingBundle);
+                yield break;
+            }
+
+            AssetBundleCreateRequest bundleRequest = AssetBundle.LoadFromFileAsync(bundlePath);
+            yield return bundleRequest;
+
+            AssetBundle assetBundle = bundleRequest.assetBundle;
+            if (assetBundle == null)
+            {
+                Debug.LogError("Asset Bundle Failed");
+                yield break;
+            }
+
+            yield return LoadAsset(assetBundle);
         }
-        else
+
+        IEnumerator LoadAsset(AssetBundle assetBundle)
         {
-            Debug.LogError("no asset found in bundle");
+            AssetBundleRequest assetRequest = assetBundle.LoadAssetAsync<GameObject>(assetName);
+            yield return assetRequest;
+
+            GameObject loadedObject = assetRequest.asset as GameObject;
+            if (loadedObject != null)
+            {
+                foreach (Transform transform in echoPointSpawns)
+                {
+                    Instantiate(loadedObject, transform.position, Quaternion.identity);
+                }
+                Debug.Log("Loaded and instantiated: " + assetName);
+            }
+            else
+            {
+                Debug.LogError("no asset found in bundle");
+            }
         }
     }
 }

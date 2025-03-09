@@ -90,17 +90,17 @@ public class SceneLoader : MonoBehaviour
     {
         await Task.Delay(100);
 
+        Seva.HeartsTest.Instance.SetHearts(Seva.SaveSystem.Instance.hearts);// It also doesn't work without delays ):
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
             player.GetComponent<CharacterController>().enabled = false;
-            player.transform.position = SaveSystem.Instance.playerPos;
-            await Task.Delay(100);
+            player.transform.position = Seva.SaveSystem.Instance.playerPos;
             player.GetComponent<CharacterController>().enabled = true;
 
 
             Debug.Log(player.name);
-            Debug.Log("Player moved to saved position: " + SaveSystem.Instance.playerPos);
+            Debug.Log("Player moved to saved position: " + Seva.SaveSystem.Instance.playerPos);
         }
         else
         {

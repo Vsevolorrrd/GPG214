@@ -1,26 +1,29 @@
 using System.IO;
 using UnityEngine;
 
-public class FileManagment : MonoBehaviour
+namespace Seva
 {
-    public string folderPath;
-    public string filePath;
-
-    void Start()
+    public class FileManagment : MonoBehaviour
     {
-        folderPath = Path.Combine(Application.persistentDataPath, "GameData");
-        filePath = Path.Combine(folderPath, "saveData.txt");
+        public string folderPath;
+        public string filePath;
 
-        if (!Directory.Exists(folderPath))
+        void Start()
         {
-            Directory.CreateDirectory(folderPath);
-            Debug.Log("Created Folder: " + folderPath);
-        }
+            folderPath = Path.Combine(Application.persistentDataPath, "GameData");
+            filePath = Path.Combine(folderPath, "saveData.txt");
 
-        if (!File.Exists(filePath))
-        {
-            File.WriteAllText(filePath, "");
-            Debug.Log("Created File: " + filePath);
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+                Debug.Log("Created Folder: " + folderPath);
+            }
+
+            if (!File.Exists(filePath))
+            {
+                File.WriteAllText(filePath, "");
+                Debug.Log("Created File: " + filePath);
+            }
         }
     }
 }
